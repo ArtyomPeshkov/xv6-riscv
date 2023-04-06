@@ -36,3 +36,7 @@ entry("getpid");
 entry("sbrk");
 entry("sleep");
 entry("uptime");
+entry("sleeplock_request_processing");
+entry("dmesg");
+entry("vmprint");
+entry("pgaccess");

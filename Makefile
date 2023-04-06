@@ -28,7 +28,11 @@ OBJS = \
   $K/sysfile.o \
   $K/kernelvec.o \
   $K/plic.o \
-  $K/virtio_disk.o
+  $K/virtio_disk.o \
+  $K/lockrequestprocessing.o \
+  $K/sys_sleeplock_request_processing.o\
+  $K/system_char_buf.o\
+  $K/pageprinter.o\
 
 # riscv64-unknown-elf- or riscv64-linux-gnu-
 # perhaps in /opt/riscv/bin
@@ -132,6 +136,9 @@ UPROGS=\
 	$U/_grind\
 	$U/_wc\
 	$U/_zombie\
+	$U/_ht_2_task_1\
+	$U/_hometask_4\
+	$U/_ht_3_test\
 
 fs.img: mkfs/mkfs README $(UPROGS)
 	mkfs/mkfs fs.img README $(UPROGS)
