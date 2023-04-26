@@ -26,6 +26,8 @@ int sleeplock_request_processing(int, int);
 int dmesg(char*);
 void vmprint(void);
 void pgaccess(void);
+void pgaccess(void);
+void set_buf_settings(int, int, int);
 
 // ulib.c
 int stat(const char*, struct stat*);

@@ -10,10 +10,15 @@
 #include "sleeplock.h"
 #include "file.h"
 #include "memlayout.h"
+#include "system_char_buf.h"
 
 #define NUMBER_OF_CHARS ((1 << 11) - 1)
 #define TICKS_BUFFER_SIZE 24
 static char digits_custom[] = "0123456789abcdef";
+
+int SWITCH = 1;
+int INTER = 1;
+int SYSCALL = 1;
 
 short flag = 1;
 
@@ -30,6 +35,24 @@ uint64 prev_pos(uint64 pos){
     return NUMBER_OF_CHARS - 1;
   else
     return pos - 1;
+}
+
+int get_switch(){
+  return SWITCH;
+}
+
+int get_inter(){
+  return INTER;
+}
+
+int get_syscall(){
+  return SYSCALL;
+}
+
+void setter(int sw, int inter, int sys){
+  SWITCH = sw;
+  INTER = inter;
+  SYSCALL = sys;
 }
 
 void helping_printer(){
@@ -144,9 +167,7 @@ pr_msg(char *fmt, ...)
 
   acquire(&spinned_buffer.spnlock);
 
-  acquire(&tickslock);
   uint ticks_at_start = ticks;
-  release(&tickslock);
 
   if (fmt == 0)
     return;
@@ -209,6 +230,17 @@ pr_msg(char *fmt, ...)
 }
 
 uint64 
+sys_set_buf_settings(void) 
+{
+  acquire(&spinned_buffer.spnlock);
+  argint(0, &SWITCH);
+  argint(1, &INTER);
+  argint(2, &SYSCALL);
+  release(&spinned_buffer.spnlock);
+  return 0;
+}
+
+uint64 
 sys_dmesg(void) 
 {
   acquire(&spinned_buffer.spnlock);
@@ -217,7 +249,6 @@ sys_dmesg(void)
   argaddr(0, &u_buf);
  
   if (spinned_buffer.was_reset == 0) {
-    printf("%d\n",spinned_buffer.last_pos);
     if (copyout(myproc()->pagetable, u_buf, spinned_buffer.buffer, sizeof(char) * (long long)spinned_buffer.last_pos) < 0){
       release(&spinned_buffer.spnlock);
       return -1;
@@ -238,8 +269,6 @@ sys_dmesg(void)
     release(&spinned_buffer.spnlock);
     return NUMBER_OF_CHARS;
   }
-
-  
 }
 
 /*

@@ -24,3 +24,4 @@
 #define SYS_dmesg 23
 #define SYS_vmprint 24
 #define SYS_pgaccess 25
+#define SYS_set_buf_settings 26

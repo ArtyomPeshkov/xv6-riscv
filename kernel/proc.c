@@ -463,6 +463,8 @@ scheduler(void)
         // before jumping back to us.
         p->state = RUNNING;
         c->proc = p;
+        if (get_switch() == 1)
+          pr_msg("Switch: pid=%d, proc_name=%s", p->pid, p->name);
         swtch(&c->context, &p->context);
 
         // Process is done running for now.
