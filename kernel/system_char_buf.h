@@ -1,7 +1,21 @@
-void writer(const char *);
+uint64 prev_pos(uint64 pos);
 
-int min(int, int);
+void helping_printer();
 
-void pr_msg (const char *);
+void helping_printer();
 
 void lock_init();
+
+void writer_chr(const char ch);
+
+void write_n();
+
+void setter(int, int, int);
+
+int get_switch();
+
+int get_inter();
+
+int get_syscall();
+
+void pr_msg(char *fmt, ...);

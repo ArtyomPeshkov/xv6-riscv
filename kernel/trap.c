@@ -5,6 +5,7 @@
 #include "spinlock.h"
 #include "proc.h"
 #include "defs.h"
+#include "system_char_buf.h"
 
 struct spinlock tickslock;
 uint ticks;
@@ -199,7 +200,8 @@ devintr()
     // now allowed to interrupt again.
     if(irq)
       plic_complete(irq);
-
+    if (get_inter() == 1)  
+      pr_msg("Interrupt: irq=%d", irq);
     return 1;
   } else if(scause == 0x8000000000000001L){
     // software interrupt from a machine-mode timer interrupt,

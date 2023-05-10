@@ -5,6 +5,7 @@
 #include "spinlock.h"
 #include "proc.h"
 #include "defs.h"
+#include "system_char_buf.h"
 
 struct cpu cpus[NCPU];
 
@@ -346,6 +347,8 @@ reparent(struct proc *p)
 void
 exit(int status)
 {
+  //pr_msg("exit");
+  
   struct proc *p = myproc();
 
   if(p == initproc)
@@ -460,6 +463,8 @@ scheduler(void)
         // before jumping back to us.
         p->state = RUNNING;
         c->proc = p;
+        if (get_switch() == 1)
+          pr_msg("Switch: pid=%d, proc_name=%s", p->pid, p->name);
         swtch(&c->context, &p->context);
 
         // Process is done running for now.
