@@ -40,3 +40,6 @@ entry("sleeplock_request_processing");
 entry("dmesg");
 entry("vmprint");
 entry("pgaccess");
+entry("set_buf_settings");
+entry("symlink");
+entry("readlink");

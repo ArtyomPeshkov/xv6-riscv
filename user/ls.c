@@ -1,4 +1,6 @@
+#include "kernel/param.h"
 #include "kernel/types.h"
+#include "kernel/fcntl.h"
 #include "kernel/stat.h"
 #include "user/user.h"
 #include "kernel/fs.h"
@@ -30,7 +32,7 @@ ls(char *path)
   struct dirent de;
   struct stat st;
 
-  if((fd = open(path, 0)) < 0){
+  if((fd = open(path, O_NOFOLLOW)) < 0){
     fprintf(2, "ls: cannot open %s\n", path);
     return;
   }
@@ -64,9 +66,27 @@ ls(char *path)
         printf("ls: cannot stat %s\n", buf);
         continue;
       }
-      printf("%s %d %d %d\n", fmtname(buf), st.type, st.ino, st.size);
+      printf("%s %d %d %d ", fmtname(buf), st.type, st.ino, st.size);
+      if (st.type == T_SYMLINK) {
+        char target[MAXPATH];
+        if (!readlink(buf, target)) {
+          printf(": ");
+          printf(target);
+        }
+      }
+      printf("\n");
     }
     break;
+  case T_SYMLINK: {
+    char target[MAXPATH];
+    if (readlink(path, target)) {
+      printf("ls: failed to read symbolic link target at %s\n", path);
+      break;
+    }
+    printf("%s %d %d %l: %s\n", fmtname(path), st.type, st.ino, st.size,
+           target);
+    break;
+    }
   }
   close(fd);
 }
