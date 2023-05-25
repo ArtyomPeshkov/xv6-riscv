@@ -107,6 +107,8 @@ extern uint64 sys_dmesg(void);
 extern uint64 sys_vmprint(void);
 extern uint64 sys_pgaccess(void);
 extern uint64 sys_set_buf_settings(void);
+extern uint64 sys_symlink(void);
+extern uint64 sys_readlink(void);
 
 // An array mapping syscall numbers from syscall.h
 // to the function that handles the system call.
@@ -136,7 +138,9 @@ static uint64 (*syscalls[])(void) = {
 [SYS_dmesg]   sys_dmesg,
 [SYS_vmprint]   sys_vmprint,
 [SYS_pgaccess]   sys_pgaccess,
-[SYS_set_buf_settings]   sys_set_buf_settings
+[SYS_set_buf_settings]   sys_set_buf_settings,
+[SYS_symlink] sys_symlink,
+[SYS_readlink] sys_readlink,
 };
 
 void

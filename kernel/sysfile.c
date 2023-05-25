@@ -338,7 +338,7 @@ sys_open(void)
       return -1;
     }
     ilock(ip);
-    if(ip->type == T_DIR && omode != O_RDONLY){
+    if(ip->type == T_DIR && omode != O_RDONLY && omode != O_NOFOLLOW){
       iunlockput(ip);
       end_op();
       return -1;
@@ -372,6 +372,32 @@ sys_open(void)
 
   if((omode & O_TRUNC) && ip->type == T_FILE){
     itrunc(ip);
+  }
+  int length = 0;
+  while(ip->type == T_SYMLINK && omode != O_NOFOLLOW) {
+    
+    if (length++ > 10) {
+      iunlockput(ip);
+      end_op();
+      return -1;
+    }
+    
+    if(readi(ip, 0, (uint64)path, 0, MAXPATH) < MAXPATH) {
+      iunlockput(ip);
+      end_op();
+      return -1;
+    }
+
+    iunlockput(ip);
+    struct inode *tmp = namei(path);
+
+    if(tmp == 0) {
+      end_op();
+      return -1;
+    }
+    
+    ip = tmp;
+    ilock(ip);
   }
 
   iunlock(ip);

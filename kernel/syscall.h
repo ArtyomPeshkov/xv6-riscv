@@ -25,3 +25,6 @@
 #define SYS_vmprint 24
 #define SYS_pgaccess 25
 #define SYS_set_buf_settings 26
+#define SYS_symlink 27
+#define SYS_readlink 28
+

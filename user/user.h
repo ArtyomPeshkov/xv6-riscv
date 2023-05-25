@@ -28,6 +28,8 @@ void vmprint(void);
 void pgaccess(void);
 void pgaccess(void);
 void set_buf_settings(int, int, int);
+int symlink(const char*, const char*);
+int readlink(const char*, char*);
 
 // ulib.c
 int stat(const char*, struct stat*);
