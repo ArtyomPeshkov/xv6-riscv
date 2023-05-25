@@ -142,6 +142,7 @@ UPROGS=\
 	$U/_ht_3_test\
 	$U/_hometask_5-6\
 	$U/_hometask_7\
+	$U/_file_creator\
 
 fs.img: mkfs/mkfs README $(UPROGS)
 	mkfs/mkfs fs.img README $(UPROGS)
