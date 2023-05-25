@@ -17,7 +17,6 @@ int stoi(const char *number, int *res) {
 }
 
 int create_empty_file(const char *file, int bytes) {
-  printf("%d", bytes);
   int fd = open(file, O_WRONLY | O_CREATE | O_TRUNC);
   if (fd < 0)
     return -1;
@@ -66,6 +65,5 @@ int main(int argc, const char **argv) {
   int err = create_empty_file(file, bytes);
   if (err)
     printf("nullfile: failed\n");
-  printf("Ok");
   exit(err);
 }
